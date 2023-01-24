@@ -10,8 +10,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 // local imports
 import logger from './utils/logger.js';
+import { verifyToken } from './middlewares/auth.middleware.js';
 import { register } from './controllers/auth.js';
+import { createPost } from './controllers/posts.js';
 import authRoutes from './routes/auth.routes.js';
+import usersRoutes from './routes/users.routes.js';
+import postsRoutes from './routes/posts.routes.js';
 
 // * CONFIGURATIONS *
 const __filename = fileURLToPath(import.meta.url);
@@ -42,9 +46,12 @@ const upload = multer({ storage });
 
 // ! ROUTES WITH FILES
 app.post('/auth/register', upload.single('picture'), register);
+app.use('/posts', verifyToken, upload.single('picture'), createPost);
 
 //! ROUTES
 app.use('/auth', authRoutes);
+app.use('/users', usersRoutes);
+app.use('/posts', postsRoutes);
 
 // * MONGOOSE SETUP *
 //TODO resolve strictQuery issue to avoid warning
