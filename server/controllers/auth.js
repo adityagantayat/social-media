@@ -36,7 +36,7 @@ export const register = async (req, res) => {
 //* LOGIN HANDLER
 export const login = async (req, res) => {
 	try {
-		const { email, password } = req.bodyl;
+		const { email, password } = req.body;
 		const user = await User.findOne({ email: email });
 
 		//if no user is found with the given email, return 400
@@ -46,7 +46,7 @@ export const login = async (req, res) => {
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) return res.status(StatusCodes.BAD_REQUEST).json({ msg: 'Invalid Credentials' });
 
-		const token = jwt.sign({ id: user_id }, process.env.JWT_SECRET);
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 		delete user.password;
 		res.status(StatusCodes.OK).json({ token, user });
 	} catch (error) {
