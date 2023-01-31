@@ -1,5 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
+import logger from '../utils/logger.js';
 
 export const verifyToken = async (req, res, next) => {
 	try {
@@ -15,5 +16,6 @@ export const verifyToken = async (req, res, next) => {
 		next();
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err.message });
+		logger.error(err.message);
 	}
 };

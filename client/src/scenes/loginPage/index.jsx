@@ -1,7 +1,20 @@
 import { Box, Typography, useTheme, useMediaQuery } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Form from './Form';
+import { useEffect } from 'react';
 
 const LoginPage = () => {
+	const token = useSelector((state) => state.token);
+	const navigate = useNavigate();
+
+	//! if there is an active session then redirect the logged in user to the home page
+	useEffect(() => {
+		if (token) navigate('/home');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	//! only if there is no logged in user then show the form
 	const theme = useTheme();
 	const isNonMobileScreens = useMediaQuery('(min-width: 1000px)');
 

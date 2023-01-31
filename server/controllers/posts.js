@@ -55,14 +55,14 @@ export const likePost = async (req, res) => {
 	try {
 		const { id } = req.params;
 		const { userId } = req.body;
-		const post = Post.findById(id);
+		const post = await Post.findById(id);
 		const isLiked = post.likes.get(userId);
 		if (isLiked) {
 			post.likes.delete(userId);
 		} else {
 			post.likes.set(userId, true);
 		}
-		const updatedPost = await Post.findByIdAndUpdate(id, { liked: post.likes }, { new: true });
+		const updatedPost = await Post.findByIdAndUpdate(id, { likes: post.likes }, { new: true });
 		res.status(StatusCodes.OK).json(updatedPost);
 	} catch (err) {
 		res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
